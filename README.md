@@ -1,2 +1,2 @@
 # extractor-series
-Extract series of pages like pelisplus.co
+Extract series (TV) of pages like pelisplus.co

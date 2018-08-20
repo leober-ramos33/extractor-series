@@ -86,8 +86,10 @@ for season in $season_end; do
 	mv .linux-$serie.$season.min.txt linux-$serie.$season.min.txt &> /dev/null
 	zip $serie.$season.zip linux-$serie.$season.txt linux-$serie.$season.min.txt windows-$serie.$season.txt windows-$serie.$season.min.txt &> /dev/null
 
-	rm linux-* &> /dev/null
-	rm windows-* &> /dev/null
+	rm linux-$serie.$season.txt &> /dev/null
+	rm linux-$serie.$season.min.txt &> /dev/null
+	rm windows-$serie.$season.txt &> /dev/null
+	rm windows-$serie.$season.txt &> /dev/null
 done
 
 

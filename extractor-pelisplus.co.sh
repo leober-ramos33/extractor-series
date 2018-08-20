@@ -59,8 +59,10 @@ for season in $season_end; do
 		echo -n "${season}x${f}... "
 		html=$(curl -Ls "http://pelisplus.co/serie/${serie}/temporada-${season}/capitulo-${f}")
 		
-		if echo "${html}" | grep https://openload.co/embed/ &> /dev/null; then
-			link=$(echo "${html}" | grep https://openload.co/embed/ | sed 's/.*="//g' | sed 's/"//g')
+		if echo "${html}" | grep 'https://openload.co/embed/...........' &> /dev/null; then
+			link=$(echo "${html}" | grep 'https://openload.co/embed/...........' | sed 's/.*="//g' | sed 's/"//g')
+		elif echo "${html}" | grep 'https://streamango.com/embed/................' &> /dev/null; then
+			link=$(echo "${html}" | grep 'https://streamango.com/embed/................' | sed 's/.*="//g' | sed 's/"//g')
 		else
 			echo "${season}x${f}: " >> .linux-$serie.$season.txt
 			echo "#" >> .linux-$serie.$season.min.txt
@@ -86,10 +88,6 @@ for season in $season_end; do
 	mv .linux-$serie.$season.min.txt linux-$serie.$season.min.txt &> /dev/null
 	zip $serie.$season.zip linux-$serie.$season.txt linux-$serie.$season.min.txt windows-$serie.$season.txt windows-$serie.$season.min.txt &> /dev/null
 
-	rm linux-$serie.$season.txt &> /dev/null
-	rm linux-$serie.$season.min.txt &> /dev/null
-	rm windows-$serie.$season.txt &> /dev/null
-	rm windows-$serie.$season.txt &> /dev/null
+	rm linux-* &> /dev/null
+	rm windows-* &> /dev/null
 done
-
-

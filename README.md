@@ -11,9 +11,9 @@ Requisitos:
 * cURL
 * zip
 
-Uso: `./extractor-pelisplus.co.sh {serie} {episodios de la primera temporada} {episodios de la 2 temporada}...{episodios de la 8 temporada}`
+Uso: `./extractor-{pagina}.sh {serie} {episodios de la primera temporada} {episodios de la 2 temporada}...{episodios de la 8 temporada}`
 Ejemplo: `./extractor-pelisplus.co.sh mr-robot 10 12 10`
 El nombre de la serie lo extraen del enlace, `http://pelisplus.co/serie/mr-robot`, extraen lo ultimo y quedaria como mr-robot
 
 Paginas soportadas:
-* http://pelisplus.co
+* http://pelisplus.co - Openload.co, Streamango

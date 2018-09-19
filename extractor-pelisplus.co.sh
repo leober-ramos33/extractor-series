@@ -28,15 +28,15 @@ red="\e[31m"
 
 clear
 echo "
- _______  __   __  _______  ______    _______  _______  _______  _______  ______
-|       ||  |_|  ||       ||    _ |  |   _   ||       ||       ||       ||    _ |
-|    ___||       ||_     _||   | ||  |  |_|  ||       ||_     _||   _   ||   | ||
-|   |___ |       |  |   |  |   |_||_ |       ||       |  |   |  |  | |  ||   |_||_
-|    ___| |     |   |   |  |    __  ||       ||      _|  |   |  |  |_|  ||    __  |
-|   |___ |   _   |  |   |  |   |  | ||   _   ||     |_   |   |  |       ||   |  | |
-|_______||__| |__|  |___|  |___|  |_||__| |__||_______|  |___|  |_______||___|  |_|
-"
+#######
+#       #    # ##### #####    ##    ####  #####  ####  #####
+#        #  #    #   #    #  #  #  #    #   #   #    # #    #
+#####     ##     #   #    # #    # #        #   #    # #    #
+#         ##     #   #####  ###### #        #   #    # #####
+#        #  #    #   #   #  #    # #    #   #   #    # #   #
+####### #    #   #   #    # #    #  ####    #    ####  #    #
 
+"
 if [ -z "${1}" ] || [ -z "${2}" ]; then
 	echo -e "Usage: ${0} {serie} {episodes of 1 season} {episodes of 2 season}...{episodes of 8 season}\nExample: ${0} mr-robot 10 12 10"
 	exit 0
@@ -45,7 +45,7 @@ fi
 serie="${1}"
 serieName=$(echo "${serie}" | sed 's/-/ /g' | sed -e "s/\b\(.\)/\u\1/g")
 information=$(curl -Ls "http://pelisplus.co/serie/${serie}")
-season_end=$(echo "${information}" | grep item-season-title | seq $(wc -l));
+season_end=$(echo "${information}" | grep item-season-title | seq $(wc -l))
 
 echo -e "Extracting ${underlined}${serieName}${normal}... ( http://pelisplus.co/serie/${serie} )"
 
@@ -81,13 +81,12 @@ for season in $season_end; do
 		echo -e "${green}OK!${normal} ( ${link} )"
 	done
 
-	sed 's/$'"/`echo \\\r`/" .linux-$serie.$season.txt > windows-$serie.$season.txt
-	sed 's/$'"/`echo \\\r`/" .linux-$serie.$season.min.txt > windows-$serie.$season.min.txt
+	sed 's/$'"/`echo \\\r`/" .linux-$serie.$season.txt > $serie.$season.txt
+	sed 's/$'"/`echo \\\r`/" .linux-$serie.$season.min.txt > $serie.$season.min.txt
 
-	mv .linux-$serie.$season.txt linux-$serie.$season.txt &> /dev/null
-	mv .linux-$serie.$season.min.txt linux-$serie.$season.min.txt &> /dev/null
-	zip $serie.$season.zip linux-$serie.$season.txt linux-$serie.$season.min.txt windows-$serie.$season.txt windows-$serie.$season.min.txt &> /dev/null
+	zip $serie.$season.zip $serie.$season.txt $serie.$season.min.txt &> /dev/null
 
-	rm linux-* &> /dev/null
-	rm windows-* &> /dev/null
+	rm .linux-* &> /dev/null
+	rm $serie.$season.txt &> /dev/null
+	rm $serie.$season.min.txt &> /dev/null
 done

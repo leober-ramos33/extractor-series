@@ -17,6 +17,13 @@ season_episodes[5]=$6
 season_episodes[6]=$7
 season_episodes[7]=$8
 season_episodes[8]=$9
+season_episodes[9]="${10}"
+season_episodes[10]="${11}"
+season_episodes[11]="${12}"
+season_episodes[12]="${13}"
+season_episodes[13]="${14}"
+season_episodes[14]="${15}"
+season_episodes[15]="${16}"
 
 ####### END CONFIG ##########
 
@@ -38,7 +45,7 @@ echo "
 
 "
 if [ -z "${1}" ] || [ -z "${2}" ]; then
-	echo -e "Usage: ${0} {serie} {episodes of 1 season} {episodes of 2 season}...{episodes of 8 season}\nExample: ${0} mr-robot 10 12 10"
+	echo -e "Usage: ${0} {serie} {episodes of 1 season} {episodes of 2 season}...{episodes of 15 season}\nExample: ${0} mr-robot 10 12 10"
 	exit 0
 fi
 
@@ -59,10 +66,10 @@ for season in $season_end; do
 		echo -n "${season}x${f}... "
 		html=$(curl -Ls "http://pelisplus.co/serie/${serie}/temporada-${season}/capitulo-${f}")
 		
-		if echo "${html}" | grep 'https://openload.co/embed/...........' &> /dev/null; then
-			link=$(echo "${html}" | grep 'https://openload.co/embed/...........' | sed 's/.*="//g' | sed 's/"//g')
-		elif echo "${html}" | grep 'https://streamango.com/embed/................' &> /dev/null; then
-			link=$(echo "${html}" | grep 'https://streamango.com/embed/................' | sed 's/.*="//g' | sed 's/"//g')
+		if echo "${html}" | grep -o 'https://openload.co/embed/...........' &> /dev/null; then
+			link=$(echo "${html}" | grep -o 'https://openload.co/embed/...........' | head -n 1)
+		elif echo "${html}" | grep -o 'https://streamango.com/embed/................' &> /dev/null; then
+			link=$(echo "${html}" | grep -o 'https://streamango.com/embed/................' | head -n 1)
 		else
 			echo "${season}x${f}: " >> .linux-$serie.$season.txt
 			echo "#" >> .linux-$serie.$season.min.txt
@@ -70,12 +77,7 @@ for season in $season_end; do
 			continue
 		fi
 		
-		if [ $(echo "${link}" | wc -l) -eq 2 ]; then
-			link=$(echo "${link}" | sed -e "2d")
-		elif [ $(echo "${link}" | wc -l) -eq 3 ]; then
-			link=$(echo "${link}" | sed -e "2,3d")
-		fi
-
+		link=$(echo "${link}" | head -n 1)
 		echo "${season}x${f}: ${link}" >> .linux-$serie.$season.txt
 		echo "${link}" >> .linux-$serie.$season.min.txt
 		echo -e "${green}OK!${normal} ( ${link} )"

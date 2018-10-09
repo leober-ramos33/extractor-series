@@ -77,7 +77,6 @@ for season in $season_end; do
 			continue
 		fi
 		
-		link=$(echo "${link}" | head -n 1)
 		echo "${season}x${f}: ${link}" >> .linux-$serie.$season.txt
 		echo "${link}" >> .linux-$serie.$season.min.txt
 		echo -e "${green}OK!${normal} ( ${link} )"

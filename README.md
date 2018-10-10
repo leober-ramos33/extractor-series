@@ -1,20 +1,20 @@
 # extractor-series
 
-Extractor-Series es un conjunto de scripts escritos en Bash para extraer enlaces de descarga de series de TV de paginas piratas.
+Extractor-Series is a set of scripts written in Bash to extract download links from TV series of pirated pages.
 
-Solo para que conste, no creé esta herramienta para tolerar la piratería, pero es inevitable y sé que alguien la usará para tales fines.
-Independientemente, la forma en que utilice esta herramienta es totalmente su responsabilidad.
-Respete y apoye a los creadores de las series, junto a su elenco.
+Just for the record, I did not create this tool to tolerate piracy, but it is inevitable and I know someone will use it for such purposes.
+Regardless, the way you use this tool is entirely your responsibility.
+Respect and support the creators of the series, along with their cast.
 
-### Requisitos:
+### Requirements:
 * cURL
 * zip
-* pup (Solamente en www.seriesgato.tv)
+* pup (Only in www.seriesgato.tv) - (It comes with the folder of the script)
 
-Uso: `./extractor-<pagina>.sh <id de la serie> <episodios de la primera temporada> <episodios de la 2 temporada>...<episodios de la 15 temporada>`
+Usage: `./extractor-seriesgato.tv.sh <id of serie> <episodes of 1 season> <episodes of 2 season>...<episodes of 15 season>`
+  
+Example: .`/extractor-seriesgato.tv.sh 18-5-mr-robot-289590.html 10 12 10`
 
-Ejemplo: `./extractor-pelisplus.co.sh mr-robot 10 12 10`
-
-Paginas soportadas:
+Supported pages:
 * http://pelisplus.co - Openload.co, Streamango
-* https://www.seriesgato.tv - Openload.co, Stremango
+* https://www.seriesgato.tv - Openload.co, Stremango (WARNING: It's not works with series with names contain numbers)

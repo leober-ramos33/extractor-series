@@ -83,13 +83,9 @@ for s in $seasons; do
 	for (( i=1; i <= episodesEnd; i++ )); do
 		if [ "${i}" -lt 10 ]; then
 			echo -n "${s}x0${i}... ( https://www.seriesgato.tv/capitulo/18-5-${serie}${s}x0${i}-${serieCode}.html )"
-		else
-			echo -n "${s}x${i}... ( https://www.seriesgato.tv/capitulo/18-5-${serie}${s}x${i}-${serieCode}.html )"
-		fi
-
-		if [ "${i}" -lt 10 ]; then
 			req=$(curl -Ls "https://www.seriesgato.tv/capitulo/18-5-${serie}${s}x0${i}-${serieCode}.html")
 		else
+			echo -n "${s}x${i}... ( https://www.seriesgato.tv/capitulo/18-5-${serie}${s}x${i}-${serieCode}.html )"
 			req=$(curl -Ls "https://www.seriesgato.tv/capitulo/18-5-${serie}${s}x${i}-${serieCode}.html")
 		fi
 

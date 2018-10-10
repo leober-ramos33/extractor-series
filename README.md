@@ -17,4 +17,4 @@ Example: `./extractor-seriesgato.tv.sh 18-5-mr-robot-289590.html 10 12 10`
 
 ### Supported pages:
 * http://pelisplus.co - Openload.co, Streamango
-* https://www.seriesgato.tv - Openload.co, Stremango
+* https://www.seriesgato.tv - Openload.co, Stremango (WARNING: It's not works with series with names contain numbers)

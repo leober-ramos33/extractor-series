@@ -15,6 +15,6 @@ Usage: `./extractor-<page>.sh <id of serie> <episodes of 1 season> <episodes of 
   
 Example: `./extractor-seriesgato.tv.sh 18-5-mr-robot-289590.html 10 12 10`
 
-Supported pages:
+### Supported pages:
 * http://pelisplus.co - Openload.co, Streamango
 * https://www.seriesgato.tv - Openload.co, Stremango (WARNING: It's not works with series with names contain numbers)

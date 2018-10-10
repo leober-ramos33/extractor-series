@@ -11,7 +11,7 @@ Respete y apoye a los creadores de las series, junto a su elenco.
 * zip
 * pup (Solamente en www.seriesgato.tv)
 
-Uso: `./extractor-{pagina}.sh <id de la serie> <episodios de la primera temporada> <episodios de la 2 temporada>...<episodios de la 15 temporada>`
+Uso: `./extractor-<pagina>.sh <id de la serie> <episodios de la primera temporada> <episodios de la 2 temporada>...<episodios de la 15 temporada>`
 Ejemplo: `./extractor-pelisplus.co.sh mr-robot 10 12 10`
 
 Paginas soportadas:

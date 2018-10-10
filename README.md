@@ -1,19 +1,19 @@
 # extractor-series
 
-Extractor-Series es un script escrito en Bash para extraer los enlaces de las series (TV) de paginas web, como: `http://pelisplus.co`.
+Extractor-Series es un conjunto de scripts escritos en Bash para extraer enlaces de descarga de series de TV de paginas piratas.
 
+Solo para que conste, no creé esta herramienta para tolerar la piratería, pero es inevitable y sé que alguien la usará para tales fines.
+Independientemente, la forma en que utilice esta herramienta es totalmente su responsabilidad.
+Respete y apoye a los creadores de las series, junto a su elenco.
 
-Demostración:
-
-[YouTube Video](https://youtu.be/Tg2bG9De2gY)
-
-Requisitos:
+### Requisitos:
 * cURL
 * zip
+* pup (Solamente en www.seriesgato.tv)
 
-Uso: `./extractor-{pagina}.sh {serie} {episodios de la primera temporada} {episodios de la 2 temporada}...{episodios de la 8 temporada}`
+Uso: `./extractor-{pagina}.sh <id de la serie> <episodios de la primera temporada> <episodios de la 2 temporada>...<episodios de la 15 temporada>`
 Ejemplo: `./extractor-pelisplus.co.sh mr-robot 10 12 10`
-El nombre de la serie lo extraen del enlace, `http://pelisplus.co/serie/mr-robot`, extraen lo ultimo y quedaria como mr-robot
 
 Paginas soportadas:
 * http://pelisplus.co - Openload.co, Streamango
+* https://www.seriesgato.tv - Openload.co, Stremango

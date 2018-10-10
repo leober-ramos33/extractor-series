@@ -115,7 +115,11 @@ for s in $seasons; do
 		
 		link=$(echo "${links}" | sed 's/\\n/\n/g' | sed -n -e "${optionSelected}p")
 
-		echo "${s}x${i}: ${link}" >> ".${serie}.${s}.txt"
+		if [ "${i}" -lt 10 ]; then
+			echo "${s}x0${i}: ${link}" >> ".${serie}.${s}.txt"
+		else	
+			echo "${s}x${i}: ${link}" >> ".${serie}.${s}.txt"
+		fi
 		echo "${link}" >> ".${serie}.${s}.min.txt"
 		echo -e "\n\t${green}OK!${normal} ( ${bold}${link}${normal} )"
 	done

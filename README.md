@@ -13,7 +13,7 @@ Respect and support the creators of the series, along with their cast.
 
 Usage: `./extractor-<page>.sh <id of serie> <episodes of 1 season> <episodes of 2 season>...<episodes of 15 season>`
   
-Example: .`/extractor-seriesgato.tv.sh 18-5-mr-robot-289590.html 10 12 10`
+Example: `./extractor-seriesgato.tv.sh 18-5-mr-robot-289590.html 10 12 10`
 
 Supported pages:
 * http://pelisplus.co - Openload.co, Streamango

@@ -9,7 +9,7 @@ Respect and support the creators of the series, along with their cast.
 ### Requirements:
 * cURL
 * zip
-* pup (Only in www.seriesgato.tv) - (It comes with the folder of the script. NIt is of architecture amd64, if you want the one of i386 or any other architecture you can find it [here](https://github.com/ericchiang/pup/releases))
+* pup (Only in www.seriesgato.tv) - (It comes with the folder of the script. It is of architecture amd64, if you want the one of i386 or any other architecture you can find it [here](https://github.com/ericchiang/pup/releases))
 
 Usage: `./extractor-<page>.sh <id of serie> <episodes of 1 season> <episodes of 2 season>...<episodes of 15 season>`
   

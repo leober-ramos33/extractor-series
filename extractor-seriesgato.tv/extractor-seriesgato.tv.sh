@@ -5,7 +5,6 @@
 # By @yonaikerlol
 
 
-
 ####### CONFIG #########
 
 # Episodes
@@ -65,7 +64,7 @@ if ! command -v pup &> /dev/null; then
 	fi
 fi
 
-echo -e "${red}WARNING:${normal} It's not works with series with names contain numbers"
+echo -e "${red}WARNING:${normal} It doesn't work with series that contain numbers on their name"
 
 serieName=$(echo "${1}" | sed 's/18\-5\-//g' | sed 's/\-/ /g' | sed 's/\.html//g' | sed -e 's/\b\(.\)/\u\1/g')
 serieCode=$(echo "${serieName}" | sed 's/^[^1-9]*//g')
@@ -107,7 +106,7 @@ for s in $seasons; do
 		echo -e "\n\tOptions: ${options}"
 		echo -e "\t${bold}NOTE:${normal} Inglés = English\tLatino = Spanish (America)\tCastellano = Spanish (Europe)\tSub. Esp. = English with spanish subtitles"
 		echo -e "\t${red}WARNING:${normal} You have 10 seconds to answer, if you do not answer, option 1 will be chosen by default."
-		echo -en "\tSelect a option (A number): "
+		echo -en "\tSelect an option (a number): "
 		
 		if ! read -t 10 -r optionSelected; then
 			optionSelected=1

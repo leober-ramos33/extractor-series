@@ -90,7 +90,7 @@ for s in $seasons; do
 
 		totalOptions=$(echo "${req}" | pup 'tbody > tr > td[style="width:auto;text-align:center;"]' | sed 's/^[^1-9]*//g' | sed '/^$/d' | seq $(wc -l))
 
-		if $totalOptions; then
+		if $totalOptions &> /dev/null; then
 			if [ "${i}" -lt 10 ]; then
 				echo "${s}x0${i}" >> ".${serie}.${s}.txt"
 			else	

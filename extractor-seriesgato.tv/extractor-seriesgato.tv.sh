@@ -89,6 +89,18 @@ for s in $seasons; do
 		fi
 
 		totalOptions=$(echo "${req}" | pup 'tbody > tr > td[style="width:auto;text-align:center;"]' | sed 's/^[^1-9]*//g' | sed '/^$/d' | seq $(wc -l))
+
+		if $totalOptions; then
+			if [ "${i}" -lt 10 ]; then
+				echo "${s}x0${i}" >> ".${serie}.${s}.txt"
+			else	
+				echo "${s}x${i}:" >> ".${serie}.${s}.txt"
+			fi
+			echo "#" >> ".${serie}.${s}.min.txt"
+			echo -e "\t${red}NOK!${normal}"
+			continue
+		fi
+
 		for f in $totalOptions; do
 			link=$(echo "${req}" | pup 'tbody > tr > td[style="text-align:center;"]:nth-child(2) > a.Button.STPb attr{href}' | sed -n -e "${f}p" | sed 's/.*l\///g' | base64 -d | base64 -d)
 			language=$(echo "${req}" | pup 'tbody > tr > td[style="text-align:center;"]:nth-child(3) > span text{}' | sed -n -e "${f}p")
@@ -113,7 +125,7 @@ for s in $seasons; do
 		fi
 		
 		link=$(echo "${links}" | sed 's/\\n/\n/g' | sed -n -e "${optionSelected}p")
-
+		
 		if [ "${i}" -lt 10 ]; then
 			echo "${s}x0${i}: ${link}" >> ".${serie}.${s}.txt"
 		else	

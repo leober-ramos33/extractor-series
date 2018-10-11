@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ###### Information #######
-# Script for Bash, for extrancting links of series from pelisplus.co
+# Script for Bash, for extracting links of series from pelisplus.co
 # By @yonaikerlol
 
 
@@ -9,21 +9,21 @@
 ####### CONFIG #########
 
 # Episodes
-season_episodes[1]=$2
-season_episodes[2]=$3
-season_episodes[3]=$4
-season_episodes[4]=$5
-season_episodes[5]=$6
-season_episodes[6]=$7
-season_episodes[7]=$8
-season_episodes[8]=$9
-season_episodes[9]="${10}"
-season_episodes[10]="${11}"
-season_episodes[11]="${12}"
-season_episodes[12]="${13}"
-season_episodes[13]="${14}"
-season_episodes[14]="${15}"
-season_episodes[15]="${16}"
+seasonEpisodes[1]=$2
+seasonEpisodes[2]=$3
+seasonEpisodes[3]=$4
+seasonEpisodes[4]=$5
+seasonEpisodes[5]=$6
+seasonEpisodes[6]=$7
+seasonEpisodes[7]=$8
+seasonEpisodes[8]=$9
+seasonEpisodes[9]="${10}"
+seasonEpisodes[10]="${11}"
+seasonEpisodes[11]="${12}"
+seasonEpisodes[12]="${13}"
+seasonEpisodes[13]="${14}"
+seasonEpisodes[14]="${15}"
+seasonEpisodes[15]="${16}"
 
 ####### END CONFIG ##########
 
@@ -31,6 +31,7 @@ season_episodes[15]="${16}"
 green="\e[32m"
 normal="\e[0m"
 underlined="\e[4m"
+bold="\e[1m"
 red="\e[31m"
 
 clear
@@ -43,51 +44,72 @@ echo "
 #        #  #    #   #   #  #    # #    #   #   #    # #   #
 ####### #    #   #   #    # #    #  ####    #    ####  #    #
 
+#####  ###### #      #  ####  #####  #      #    #  ####
+#    # #      #      # #      #    # #      #    # #
+#    # #####  #      #  ####  #    # #      #    #  ####
+#####  #      #      #      # #####  #      #    #      #
+#      #      #      # #    # #      #      #    # #    #
+#      ###### ###### #  ####  #      ######  ####   ####
+
 "
 if [ -z "${1}" ] || [ -z "${2}" ]; then
 	echo -e "Usage: ${0} <id of serie> <episodes of 1 season> <episodes of 2 season>...<episodes of 15 season>\nExample: ${0} mr-robot 10 12 10"
 	exit 0
 fi
 
-serie="${1}"
-serieName=$(echo "${serie}" | sed 's/-/ /g' | sed -e "s/\b\(.\)/\u\1/g")
-information=$(curl -Ls "http://pelisplus.co/serie/${serie}")
-season_end=$(echo "${information}" | grep item-season-title | seq $(wc -l))
+serie=$(echo "${1}" | sed 's/-/ /g' | sed -e "s/\b\(.\)/\u\1/g")
+seasonTotal=$(curl -Ls "http://pelisplus.co/serie/${1}" | grep item-season-title | seq $(wc -l))
 
-echo -e "Extracting ${underlined}${serieName}${normal}... ( http://pelisplus.co/serie/${serie} )"
+echo -e "Extracting ${underlined}${serie}${normal}... ( http://pelisplus.co/serie/${1} )"
 
-for season in $season_end; do
-	echo "${serieName} - ${season}:" > .linux-$serie.$season.txt
-	echo "# ${serieName} - ${season}:" > .linux-$serie.$season.min.txt
-	end="${season_episodes[season]}"
-	echo -e "\n${underlined}Season ${season} (1-${end}):${normal}"
+for s in $seasonTotal; do
+	echo "${serie} - ${s}:" > ".${1}.${s}.txt"
+	echo "# ${serie} - ${s}:" > ".${1}.${s}.min.txt"
+	seasonEnd="${seasonEpisodes[s]}"
+	echo -e "\n${bold}Season ${s} (1-${seasonEnd}):${normal}"
 
-	for (( f=1; f <= $end; f++ )); do
-		echo -n "${season}x${f}... "
-		html=$(curl -Ls "http://pelisplus.co/serie/${serie}/temporada-${season}/capitulo-${f}")
-		
-		if echo "${html}" | grep -o 'https://openload.co/embed/...........' &> /dev/null; then
-			link=$(echo "${html}" | grep -o 'https://openload.co/embed/...........' | head -n 1)
-		elif echo "${html}" | grep -o 'https://streamango.com/embed/................' &> /dev/null; then
-			link=$(echo "${html}" | grep -o 'https://streamango.com/embed/................' | head -n 1)
+	for (( e=1; e <= seasonEnd; e++ )); do
+		if [ "${e}" -lt 10 ]; then
+			echo -n "${s}x0${e}... (http://pelisplus.co/serie/${1}/temporada-${s}/capitulo-${e})"
 		else
-			echo "${season}x${f}: " >> .linux-$serie.$season.txt
-			echo "#" >> .linux-$serie.$season.min.txt
+			echo -n "${s}x${e}... (http://pelisplus.co/serie/${1}/temporada-${s}/capitulo-${e})"
+		fi
+
+		req=$(curl -Ls "http://pelisplus.co/serie/${1}/temporada-${s}/capitulo-${e}")
+		
+		if echo "${req}" | grep -o 'https://openload.co/embed/...........' &> /dev/null; then
+			link=$(echo "${req}" | grep -o 'https://openload.co/embed/...........' | head -n 1)
+		elif echo "${req}" | grep -o 'https://streamango.com/embed/................' &> /dev/null; then
+			link=$(echo "${req}" | grep -o 'https://streamango.com/embed/................' | head -n 1)
+		else
+			if [ "${e}" -lt 10 ]; then
+				echo "${s}x0${e}:" >> ".${1}.${s}.txt"
+				echo "#" >> ".${1}.${s}.min.txt"
+			else
+				echo "${s}x${e}:" >> ".${1}.${s}.txt"
+				echo "#" >> ".${1}.${s}.min.txt"
+			fi
 			echo -e "${red}NOK!${normal}"
 			continue
 		fi
 		
-		echo "${season}x${f}: ${link}" >> .linux-$serie.$season.txt
-		echo "${link}" >> .linux-$serie.$season.min.txt
-		echo -e "${green}OK!${normal} ( ${link} )"
+		if [ "${e}" -lt 10 ]; then
+			echo "${s}x0${e}: ${link}" >> ".${1}.${s}.txt"
+			echo "${link}" >> ".${1}.${s}.min.txt"
+		else
+			echo "${s}x${e}: ${link}" >> ".${1}.${s}.txt"
+			echo "${link}" >> ".${1}.${s}.min.txt"
+		fi
+		echo -e "\t${green}OK!${normal} ( ${link} )"
 	done
 
-	sed 's/$'"/`echo \\\r`/" .linux-$serie.$season.txt > $serie.$season.txt
-	sed 's/$'"/`echo \\\r`/" .linux-$serie.$season.min.txt > $serie.$season.min.txt
+	sed 's/$'"/`echo \\\r`/" ".${1}.${s}.txt" > "${1}.${s}.txt"
+	sed 's/$'"/`echo \\\r`/" ".${1}.${s}.min.txt" > "${1}.${s}.min.txt"
 
-	zip $serie.$season.zip $serie.$season.txt $serie.$season.min.txt &> /dev/null
+	zip "${1}.${s}.zip" "${1}.${s}.txt" "${1}.${s}.min.txt" &> /dev/null
 
-	rm .linux-* &> /dev/null
-	rm $serie.$season.txt &> /dev/null
-	rm $serie.$season.min.txt &> /dev/null
+	rm ".${1}.${s}.txt" &> /dev/null
+	rm ".${1}.${s}.min.txt" &> /dev/null
+	rm "${1}.${s}.txt" &> /dev/null
+	rm "${1}.${s}.min.txt" &> /dev/null
 done

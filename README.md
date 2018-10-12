@@ -11,9 +11,17 @@ Respect and support the creators of the series, along with their cast.
 * zip
 * pup (Only in www.seriesgato.tv) - (x64 version bundled, you can get other versions from [here](https://github.com/ericchiang/pup/releases))
 
-Usage: `./extractor-<page>.sh <id of serie> <episodes of 1 season> <episodes of 2 season>...<episodes of 15 season>`
 
-Example: `./extractor-seriesgato.tv.sh 18-5-mr-robot-289590.html 10 12 10`
+### Usage:
+```
+./extractor-<page>.sh <id of serie> <episodes of 1 season> <episodes of 2 season>...<episodes of 15 season>
+```
+
+### Examples
+```
+./extractor-pelisplus.co.sh mr-robot 10 12 10
+./extractor-seriesgato.tv.sh 18-5-mr-robot-289590.html 10 12 10
+```
 
 ### Supported pages:
 * http://pelisplus.co - Openload.co, Streamango

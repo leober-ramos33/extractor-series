@@ -53,7 +53,8 @@ echo "
 
 "
 if [ -z "${1}" ] || [ -z "${2}" ]; then
-	echo -e "Usage: ${0} <id of serie> <episodes of 1 season> <episodes of 2 season>...<episodes of 15 season>\nExample: ${0} mr-robot 10 12 10"
+	echo "Usage: ${0} <id of serie> <episodes of 1 season> <episodes of 2 season>...<episodes of 15 season>"
+	echo "Example: ${0} mr-robot 10 12 10"
 	exit 0
 fi
 

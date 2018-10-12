@@ -125,6 +125,17 @@ for s in $seasons; do
 		if ! read -t 10 -r optionSelected; then
 			optionSelected=1
 		fi
+
+		if [ "${optionSelected}" -eq 0 ]; then
+			if [ "${i}" -lt 10 ]; then
+				echo "${s}x0${i}" >> ".${serie}.${s}.txt"
+			else	
+				echo "${s}x${i}:" >> ".${serie}.${s}.txt"
+			fi
+			echo "#" >> ".${serie}.${s}.min.txt"
+			echo -e "\t${red}NOK!${normal}"
+			continue
+		fi
 		
 		link=$(echo "${links}" | sed 's/\\n/\n/g' | sed -n -e "${optionSelected}p")
 		

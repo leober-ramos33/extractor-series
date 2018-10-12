@@ -128,7 +128,7 @@ for s in $seasons; do
 
 		if [ "${optionSelected}" -eq 0 ]; then
 			if [ "${i}" -lt 10 ]; then
-				echo "${s}x0${i}" >> ".${serie}.${s}.txt"
+				echo "${s}x0${i}:" >> ".${serie}.${s}.txt"
 			else	
 				echo "${s}x${i}:" >> ".${serie}.${s}.txt"
 			fi

@@ -51,7 +51,7 @@ echo "
  ####  ###### #    # # ######  ####   ####  #    #   #    ####  
    
 "
-if [ -z "${1}" ] || [ -z "${2}" ]; then
+if [ -z "${1}" ] || [[ "${1}" = "-h" ]] || [[ "${1}" = "--help" ]] || [[ "${1}" = "--version" ]] || [ -z "${2}" ]; then
 	echo "Usage: ${0} <id of serie> <episodes of 1 season> <episodes of 2 season>...<episodes of 15 season>"
 	echo "Example: ${0} 18-5-mr-robot-289590.html 10 12 10"
 	echo -e "${red}WARNING:${normal} It doesn't work with series that contain numbers on their name"

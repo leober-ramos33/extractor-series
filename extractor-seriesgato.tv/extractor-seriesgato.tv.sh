@@ -145,7 +145,7 @@ for s in $seasons; do
 			echo "${s}x${i}: ${link}" >> ".${serie}.${s}.txt"
 		fi
 		echo "${link}" >> ".${serie}.${s}.min.txt"
-		echo -e "\n\t${green}OK!${normal} ( ${bold}${link}${normal} )"
+		echo -e "\t${green}OK!${normal} ( ${bold}${link}${normal} )"
 	done
 
 	sed 's/$'"/`echo \\\r`/" ".${serie}.${s}.txt" > "${serie}.${s}.txt"

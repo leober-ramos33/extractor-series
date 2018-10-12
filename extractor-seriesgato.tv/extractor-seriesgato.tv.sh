@@ -52,7 +52,9 @@ echo "
    
 "
 if [ -z "${1}" ] || [ -z "${2}" ]; then
-	echo -e "Usage: ${0} <id of serie> <episodes of 1 season> <episodes of 2 season>...<episodes of 15 season>\nExample: ${0} 18-5-mr-robot-289590.html 10 12 10\n${red}WARNING:${normal} It doesn't work with series that contain numbers on their name"
+	echo -e "Usage: ${0} <id of serie> <episodes of 1 season> <episodes of 2 season>...<episodes of 15 season>"
+	echo -e "Example: ${0} 18-5-mr-robot-289590.html 10 12 10"
+	echo -e "${red}WARNING:${normal} It doesn't work with series that contain numbers on their name"
 	exit 0
 fi
 

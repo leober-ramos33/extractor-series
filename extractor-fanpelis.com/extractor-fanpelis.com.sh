@@ -59,7 +59,7 @@ if [ -z "${1}" ] || [ "${1}" = "-h" ] || [ "${1}" = "--help" ] || [ "${1}" = "--
 fi
 
 if ! command -v pup &> /dev/null; then
-	PATH=$PATH:$(pwd)
+	PATH=$PATH:$(cd ..; pwd)
 	if ! command -v pup &> /dev/null; then
 		echo -e "Not find ${underlined}pup${normal} is ${red}required${normal}"
 		exit 0

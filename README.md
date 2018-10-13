@@ -13,7 +13,7 @@ Respect and support the creators of the series, along with their cast.
 
 ### Usage:
 ```
-./extractor-<page>.sh <id of serie> <episodes of 1 season> <episodes of 2 season>...<episodes of 15 season>
+./extractor-<page>.sh <id of serie> <episodes of 1 season> [<episodes of 2 season>...<episodes of 15 season>]
 ```
 
 ### Examples:

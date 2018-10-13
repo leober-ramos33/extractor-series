@@ -9,7 +9,7 @@ Respect and support the creators of the series, along with their cast.
 ### Requirements:
 * cURL
 * zip
-* pup (Only in www.seriesgato.tv) - (x64 version bundled, you can get other versions from [here](https://github.com/ericchiang/pup/releases))
+* pup (Only in SeriesGato and Fanpelis) - (x64 version bundled, you can get other versions from [here](https://github.com/ericchiang/pup/releases))
 
 
 ### Usage:
@@ -21,8 +21,12 @@ Respect and support the creators of the series, along with their cast.
 ```
 ./extractor-pelisplus.co.sh mr-robot 10 12 10
 ./extractor-seriesgato.tv.sh 18-5-mr-robot-289590.html 10 12 10
+./extractor-fanpelis.com el-joven-sheldon 22
 ```
 
 ### Supported pages:
-* http://pelisplus.co - Openload.co, Streamango
-* https://www.seriesgato.tv - Openload.co, Streamango (WARNING: It doesn't work with series that contain numbers on their name)
+| Title | URL | Servers | Note |
+|---|---|---|---|
+| Pelisplus | http://pelisplus.co | Openload, Streamango ||
+| SeriesGato | https://www.seriesgato.tv | Openload, Streamango | It doesn't work with series that contain numbers on their name |
+| Fanpelis | http://fanpelis.com | Openload.co, Rapidvideo ||

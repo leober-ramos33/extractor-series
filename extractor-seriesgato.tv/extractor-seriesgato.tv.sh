@@ -124,9 +124,10 @@ for s in $seasons; do
 		
 		if ! read -t 10 -r optionSelected; then
 			optionSelected=1
+			echo ""
 		fi
 
-		if [ "${optionSelected}" -eq 0 ]; then
+		if [ "${optionSelected}" -eq 0 ] || ! [[ "${optionSelected}" =~ ^[0-9]+$ ]]; then
 			if [ "${i}" -lt 10 ]; then
 				echo "${s}x0${i}:" >> ".${serie}.${s}.txt"
 			else	

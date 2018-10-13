@@ -71,7 +71,7 @@ echo -e "${red}WARNING:${normal} It doesn't work with series that contain number
 serieName=$(echo "${1}" | sed 's/18\-5\-//g' | sed 's/\-/ /g' | sed 's/\.html//g' | sed -e 's/\b\(.\)/\u\1/g')
 serieCode=$(echo "${serieName}" | sed 's/^[^1-9]*//g')
 serie=$(echo "${serieName}" | sed 's/[1-9].*//g' | sed 's/ /-/g' | sed -e 's/\b\(.\)/\l\1/g')
-seasons=$(curl -Ls "http://www.seriesgato.tv/serie/${1}" | grep 'Wdgt AABox' | seq $(wc -l))
+seasons=$(curl -Ls "https://www.seriesgato.tv/serie/${1}" | grep 'Wdgt AABox' | seq $(wc -l))
 
 echo -e "Extracting ${underlined}${serieName}${normal}... ( ${underlined}https://www.seriesgato.tv/serie/${1}${normal} )"
 

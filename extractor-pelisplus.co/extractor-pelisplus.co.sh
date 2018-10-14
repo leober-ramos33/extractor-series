@@ -1,6 +1,4 @@
 #!/bin/bash
-
-###### Information #######
 # Script for Bash, for extracting links of series from pelisplus.co
 # By @yonaikerlol
 

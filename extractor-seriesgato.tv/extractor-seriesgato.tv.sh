@@ -1,6 +1,4 @@
 #!/bin/bash
-
-###### Information #######
 # Script for Bash, for extracting links of series (TV) from www.seriesgato.tv
 # By @yonaikerlol
 
@@ -99,7 +97,7 @@ for s in $seasons; do
 				echo "${s}x${i}:" >> ".${serie}.${s}.txt"
 			fi
 			echo "#" >> ".${serie}.${s}.min.txt"
-			echo -e "\t${red}NOK!${normal}"
+			echo -e "\n\t${red}NOK!${normal}"
 			continue
 		fi
 

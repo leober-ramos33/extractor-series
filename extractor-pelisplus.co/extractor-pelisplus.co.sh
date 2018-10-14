@@ -59,7 +59,7 @@ fi
 serie=$(echo "${1}" | sed 's/-/ /g' | sed -e "s/\b\(.\)/\u\1/g")
 seasonTotal=$(curl -Ls "http://pelisplus.co/serie/${1}" | grep item-season-title | seq $(wc -l))
 
-echo -e "Extracting ${underlined}${serie}${normal}... ( http://pelisplus.co/serie/${1} )"
+echo -e "Extracting ${bold}${serie}${normal}... ( ${underlined}http://pelisplus.co/serie/${1}${normal} )"
 
 for s in $seasonTotal; do
 	echo "${serie} - ${s}:" > ".${1}.${s}.txt"
@@ -69,9 +69,9 @@ for s in $seasonTotal; do
 
 	for (( e=1; e <= seasonEnd; e++ )); do
 		if [ "${e}" -lt 10 ]; then
-			echo -n "${s}x0${e}... (http://pelisplus.co/serie/${1}/temporada-${s}/capitulo-${e})"
+			echo -en "${s}x0${e}... ( ${underlined}http://pelisplus.co/serie/${1}/temporada-${s}/capitulo-${e}${normal} )"
 		else
-			echo -n "${s}x${e}... (http://pelisplus.co/serie/${1}/temporada-${s}/capitulo-${e})"
+			echo -en "${s}x${e}... ( ${underlined}http://pelisplus.co/serie/${1}/temporada-${s}/capitulo-${e}${normal} )"
 		fi
 
 		req=$(curl -Ls "http://pelisplus.co/serie/${1}/temporada-${s}/capitulo-${e}")
@@ -99,7 +99,7 @@ for s in $seasonTotal; do
 			echo "${s}x${e}: ${link}" >> ".${1}.${s}.txt"
 			echo "${link}" >> ".${1}.${s}.min.txt"
 		fi
-		echo -e "\t${green}OK!${normal} ( ${link} )"
+		echo -e "\t${green}OK!${normal} ( ${bold}${link}${normal} )"
 	done
 
 	sed 's/$'"/`echo \\\r`/" ".${1}.${s}.txt" > "${1}.${s}.txt"

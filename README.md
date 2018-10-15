@@ -7,7 +7,7 @@ Regardless, the way you use this tool is entirely your responsibility.
 Respect and support the creators of the series, along with their cast.
 
 ### Requirements:
-* cURL (`sudo apt install curl`)
+* cURL - `sudo apt install curl` or `sudo yum install curl`
 * pup (Only in SeriesGato and Fanpelis) - (x64 version bundled, you can get other versions from [here](https://github.com/ericchiang/pup/releases))
 
 

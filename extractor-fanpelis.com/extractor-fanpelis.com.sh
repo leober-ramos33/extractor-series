@@ -53,7 +53,7 @@ echo "
 "
 
 if [ -z "${1}" ] || [ "${1}" = "-h" ] || [ "${1}" = "--help" ] || [ "${1}" = "--version" ] || [ -z "${2}" ]; then
-	echo "Usage: ${0} <id of serie> <episodes of 1 season> <episodes of 2 season>...<episodes of 15 season>"
+	echo "Usage: $(basename "${0}") <id of serie> <episodes of 1 season> <episodes of 2 season>...<episodes of 15 season>"
 	echo "Example: ${0} el-joven-sheldon 22"
 	exit 0
 fi

@@ -51,7 +51,7 @@ echo "
 "
 if [ -z "${1}" ] || [ "${1}" = "-h" ] || [ "${1}" = "--help" ] || [ "${1}" = "--version" ] || [ -z "${2}" ]; then
 	echo "Usage: $(basename "${0}") <id of serie> <episodes of 1 season> <episodes of 2 season>...<episodes of 15 season>"
-	echo "Example: ${0} 18-5-mr-robot-289590.html 10 12 10"
+	echo "Example: $(basename "${0}") 18-6-mr-robot-289590.html 10 12 10"
 	echo -e "${red}WARNING:${normal} It doesn't work with series that contain numbers on their name"
 	exit 0
 fi
@@ -66,7 +66,7 @@ fi
 
 echo -e "${red}WARNING:${normal} It doesn't work with series that contain numbers on their name"
 
-serieName=$(echo "${1}" | sed 's/18\-5\-//g' | sed 's/\-/ /g' | sed 's/\.html//g' | sed -e 's/\b\(.\)/\u\1/g')
+serieName=$(echo "${1}" | sed 's/18\-6\-//g' | sed 's/\-/ /g' | sed 's/\.html//g' | sed -e 's/\b\(.\)/\u\1/g')
 serieCode=$(echo "${serieName}" | sed 's/^[^1-9]*//g')
 serie=$(echo "${serieName}" | sed 's/[1-9].*//g' | sed 's/ /-/g' | sed -e 's/\b\(.\)/\l\1/g')
 seasons=$(curl -Ls "https://www.seriesgato.tv/serie/${1}" | grep 'Wdgt AABox' | seq $(wc -l))
@@ -81,11 +81,11 @@ for s in $seasons; do
 
 	for (( i=1; i <= episodesEnd; i++ )); do
 		if [ "${i}" -lt 10 ]; then
-			echo -n "${s}x0${i}... ( https://www.seriesgato.tv/capitulo/18-5-${serie}${s}x0${i}-${serieCode}.html )"
-			req=$(curl -Ls "https://www.seriesgato.tv/capitulo/18-5-${serie}${s}x0${i}-${serieCode}.html")
+			echo -en "${s}x0${i}... ( ${underlined}https://www.seriesgato.tv/capitulo/18-6-${serie}${s}x0${i}-${serieCode}.html${normal} )"
+			req=$(curl -Ls "https://www.seriesgato.tv/capitulo/18-6-${serie}${s}x0${i}-${serieCode}.html")
 		else
-			echo -n "${s}x${i}... ( https://www.seriesgato.tv/capitulo/18-5-${serie}${s}x${i}-${serieCode}.html )"
-			req=$(curl -Ls "https://www.seriesgato.tv/capitulo/18-5-${serie}${s}x${i}-${serieCode}.html")
+			echo -en "${s}x${i}... ( ${underlined}https://www.seriesgato.tv/capitulo/18-6-${serie}${s}x${i}-${serieCode}.html${normal} )"
+			req=$(curl -Ls "https://www.seriesgato.tv/capitulo/18-6-${serie}${s}x${i}-${serieCode}.html")
 		fi
 
 		totalOptions=$(echo "${req}" | pup 'tbody > tr > td[style="width:auto;text-align:center;"]' | sed 's/^[^1-9]*//g' | sed '/^$/d' | seq $(wc -l))

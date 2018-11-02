@@ -54,7 +54,7 @@ echo "
 
 if [ -z "${1}" ] || [ "${1}" = "-h" ] || [ "${1}" = "--help" ] || [ "${1}" = "--version" ] || [ -z "${2}" ]; then
 	echo "Usage: $(basename "${0}") <id of serie> <episodes of 1 season> <episodes of 2 season>...<episodes of 15 season>"
-	echo "Example: ${0} el-joven-sheldon 22"
+	echo "Example: $(basename "${0}") el-joven-sheldon 22"
 	exit 0
 fi
 
@@ -79,10 +79,10 @@ for s in $seasons; do
 
 	for (( i=1; i <= episodesEnd; i++ )); do
 		if [ "${i}" -lt 10 ]; then
-			echo -n "${s}x0${i}... ( http://fanpelis.com/episode/${1}-temporada-${s}-episodio-${i} )"
+			echo -en "${s}x0${i}... ( ${underlined}http://fanpelis.com/episode/${1}-temporada-${s}-episodio-${i}${normal} )"
 			req=$(curl -Ls "http://fanpelis.com/episode/${1}-temporada-${s}-episodio-${i}")
 		else
-			echo -n "${s}x${i}... ( ${underlined}http://fanpelis.com/episode/${1}-temporada-${s}-episodio-${i}${normal} )"
+			echo -en "${s}x${i}... ( ${underlined}http://fanpelis.com/episode/${1}-temporada-${s}-episodio-${i}${normal} )"
 			req=$(curl -Ls "http://fanpelis.com/episode/${1}-temporada-${s}-episodio-${i}")
 		fi
 

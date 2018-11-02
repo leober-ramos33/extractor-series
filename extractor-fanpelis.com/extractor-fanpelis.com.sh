@@ -69,7 +69,7 @@ fi
 serie=$(echo "${1}" | sed 's/\-/ /g' | sed -e 's/\b\(.\)/\u\1/g')
 seasons=$(curl -Ls "https://fanpelis.com/series/${1}" | grep 'item-season' | seq $(wc -l))
 
-echo -e "Extracting ${underlined}${serie}${normal}... ( ${underlined}https://fanpelis.com/series/${1}${normal} )"
+echo -e "Extracting ${bold}${serie}${normal}... ( ${underlined}https://fanpelis.com/series/${1}${normal} )"
 
 for s in $seasons; do
 	echo "${serie} - ${s}:" > ".${1}.${s}.txt"
@@ -82,7 +82,7 @@ for s in $seasons; do
 			echo -n "${s}x0${i}... ( http://fanpelis.com/episode/${1}-temporada-${s}-episodio-${i} )"
 			req=$(curl -Ls "http://fanpelis.com/episode/${1}-temporada-${s}-episodio-${i}")
 		else
-			echo -n "${s}x${i}... ( http://fanpelis.com/episode/${1}-temporada-${s}-episodio-${i} )"
+			echo -n "${s}x${i}... ( ${underlined}http://fanpelis.com/episode/${1}-temporada-${s}-episodio-${i}${normal} )"
 			req=$(curl -Ls "http://fanpelis.com/episode/${1}-temporada-${s}-episodio-${i}")
 		fi
 

@@ -71,7 +71,7 @@ serieCode=$(echo "${serieName}" | sed 's/^[^1-9]*//g')
 serie=$(echo "${serieName}" | sed 's/[1-9].*//g' | sed 's/ /-/g' | sed -e 's/\b\(.\)/\l\1/g')
 seasons=$(curl -Ls "https://www.seriesgato.tv/serie/${1}" | grep 'Wdgt AABox' | seq $(wc -l))
 
-echo -e "Extracting ${underlined}${serieName}${normal}... ( ${underlined}https://www.seriesgato.tv/serie/${1}${normal} )"
+echo -e "Extracting ${bold}${serieName}${normal}... ( ${underlined}https://www.seriesgato.tv/serie/${1}${normal} )"
 
 for s in $seasons; do
 	echo "${serieName} - ${s}:" > ".${serie}.${s}.txt"

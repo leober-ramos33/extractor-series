@@ -18,7 +18,6 @@ Respect and support the creators of the series, along with their cast.
 
 ### Examples:
 ```
-./extractor-pelisplus.co.sh mr-robot 10 12 10
 ./extractor-seriesgato.tv.sh 18-5-the-good-doctor-328634.html 18 3
 ./extractor-fanpelis.com.sh el-joven-sheldon 22
 ```
@@ -26,6 +25,5 @@ Respect and support the creators of the series, along with their cast.
 ### Supported pages:
 | Title | URL | Servers | Note |
 |---|---|---|---|
-| Pelisplus | http://pelisplus.co | Openload, Streamango ||
 | SeriesGato | https://www.seriesgato.tv | Openload, Streamango | It doesn't work with series that contain numbers on their name |
 | Fanpelis | http://fanpelis.com | Openload, Rapidvideo ||

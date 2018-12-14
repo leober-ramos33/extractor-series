@@ -1,7 +1,7 @@
 {
 	"name": "extractor-pelisplay.tv",
 	"version": "1.0.0",
-	"description": "Extract download links of series (TV) from web pelisplay.tv",
+	"description": "Extract download links of series (TV) from pelisplay.tv",
 	"private": true,
 	"author": "yonaikerlol",
 	"license": "MIT",
@@ -25,8 +25,8 @@
 		"eslint-plugin-node": "^8.0.0",
 		"eslint-plugin-promise": "^4.0.1",
 		"eslint-plugin-standard": "^4.0.0",
+		"inquirer": "^6.2.1",
 		"ora": "^3.0.0",
-		"spawn-sync": "^2.0.0",
 		"webpack": "^4.27.1",
 		"webpack-cli": "^3.1.2"
 	}

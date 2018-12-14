@@ -2,7 +2,9 @@ import cheerio from 'cheerio';
 import axios from 'axios';
 import ora from 'ora';
 import colors from 'colors';
+import inquirer from 'inquirer';
 
+console.clear();
 const basename = path => path.split('/').reverse()[0];
 const args = process.argv.slice(1);
 const cmd = basename(args[0]);
@@ -19,6 +21,13 @@ if (args.length < 2) {
 }
 
 const id = args[1];
+
+if (id.indexOf('/') !== -1) {
+	console.error(`"${id}" is not valid id\n`.red);
+	console.error(usage);
+	process.exit(1);
+}
+
 const urlBase = 'https://www.pelisplay.tv';
 const urlSerie = `${urlBase}/serie/${id}`;
 
@@ -49,10 +58,13 @@ const urlSerie = `${urlBase}/serie/${id}`;
 
 	spinner.stop();
 
-	const title = $('h1.col-xs-12.col-sm-9.col-md-10').text();
-	const timeOfEpisodes = $('div.name.row').next().text().trim().substr(0, 10).trim();
-	const description = $('div.sinopsis.m-b-3').text();
+	const title = $('h1.col-xs-12.col-sm-9.col-md-10').text().replace(/\(\d+\)/g, '').trim();
 	const titleOriginal = $('div.directed:nth-child(1) > span:nth-child(2)').text();
+	const description = $('div.sinopsis.m-b-3').text();
+	const director = $('div.directed:nth-child(2) > span:nth-child(2)').text();
+	const creator = $('div.credits > span:nth-child(2)').text();
+	const stars = $('div.questions.m-b-3 > div.list-star:nth-child(1) > i.star-active').length;
+	let categorys = Array.from($('.category').children());
 	const trailer = $('div.capa_trailer > iframe').attr('src')
 		.replace(/www\.youtube\.com/g, 'youtu.be')
 		.replace(/embed\//g, '');
@@ -60,10 +72,6 @@ const urlSerie = `${urlBase}/serie/${id}`;
 	const seasons = $('div.posterpie > a.abrir_temporada');
 
 	const getDirector = () => {
-		const director = $('div.directed:nth-child(2) > span:nth-child(2)').text();
-
-		if (director === 'Desconocido') return '\tDirector: Unknown';
-
 		if (director.split(', ').length > 1) {
 			const directors = director.replace(/, /g, ' - ');
 			return `\tDirectors: ${directors}`;
@@ -73,10 +81,6 @@ const urlSerie = `${urlBase}/serie/${id}`;
 	};
 
 	const getCreator = () => {
-		const creator = $('div.credits > span:nth-child(2)').text();
-
-		if (creator === 'Desconocido') return '\tCreator: Unknown';
-
 		if (creator.split(', ').length > 1) {
 			const creators = creator.replace(/, /g, ' - ');
 			return `\tCreators: ${creators}`;
@@ -87,7 +91,6 @@ const urlSerie = `${urlBase}/serie/${id}`;
 
 	const getCategorys = () => {
 		let categorysArray = [];
-		let categorys = Array.from($('.category').children());
 		const categorysTotal = categorys.length;
 
 		for (let i = 0; i < categorys.length; i++) {
@@ -97,8 +100,7 @@ const urlSerie = `${urlBase}/serie/${id}`;
 		categorys = categorysArray.toString()
 			.replace(/,/g, ' - ');
 
-		if (categorysTotal === 0) return `\tCategorys(0): Unknown`;
-		else if (categorysTotal === 1) return `\tCategory(${categorysTotal}): ${categorys}`;
+		if (categorysTotal === 1) return `\tCategory(${categorysTotal}): ${categorys}`;
 		else return `\tCategorys(${categorysTotal}): ${categorys}`;
 	};
 
@@ -114,11 +116,12 @@ const urlSerie = `${urlBase}/serie/${id}`;
 	};
 
 	const getStars = () => {
-		const stars = $('div.questions.m-b-3 > div.list-star:nth-child(1) > i.star-active').length;
-		let starsIcons = `\tStars(${stars}): `;
+		let starsIcons;
 
-		if (stars === 0) starsIcons += 'Unknown';
+		if (stars === 0) starsIcons = `\tStars(${stars}): Unknown`;
+		else if (stars === 1) starsIcons = `\tStar(${stars}): ${String.fromCodePoint(11088)}`;
 		else {
+			starsIcons = `\tStars(${stars}): `;
 			for (let i = 0; i < stars; i++) {
 				starsIcons += String.fromCodePoint(11088);
 			}
@@ -127,19 +130,33 @@ const urlSerie = `${urlBase}/serie/${id}`;
 		return starsIcons;
 	};
 
+	const getTime = () => {
+		const hours = $('div.name.row').next().text().trim().substr(0, 10).trim()
+			.replace(/h.*/g, ' hours');
+		const minutes = $('div.name.row').next().text().trim().substr(0, 10).trim()
+			.replace(/.*h /g, '')
+			.replace(/min/g, ' minutes');
+		let timeString = `\tTime of the episodes: `;
+
+		if (hours === '0 hours') timeString += minutes;
+		else timeString += `${hours} ${minutes}`;
+
+		return timeString;
+	};
+
 	console.log('Extracting:', title.bold, '...\n');
 
 	console.log('Information:'.bold);
 	console.log(getYear());
-	console.log('\tTime of the episodes:', timeOfEpisodes);
+	console.log(getTime());
 	console.log('\tDescription:', description);
-	console.log(getStars());
-	console.log('\tTitle Original:', titleOriginal);
-	console.log(getDirector());
-	console.log(getCreator());
+	if (stars !== 0) console.log(getStars());
+	if (title !== titleOriginal) console.log(`\tTitle Original: ${titleOriginal}`);
+	if (director !== 'Desconocido') console.log(getDirector());
+	if (creator !== 'Desconocido') console.log(getCreator());
 	console.log(`\tTrailer:`, trailer);
-	console.log(getCategorys());
-	console.log('\tSeasons Total:', seasons.length, '\n');
+	if (categorys.length !== 0) console.log(getCategorys());
+	console.log('\tSeasons:', seasons.length, '\n');
 
 	for (let i = 1; i <= seasons.length; i++) {
 		const urlSeason = `${urlSerie}/temporada-${i}`;
@@ -183,6 +200,31 @@ const urlSerie = `${urlBase}/serie/${id}`;
 				console.error('\t\tNetwork Error'.red);
 				continue;
 			}
+
+			const $ = cheerio.load(body);
+
+			const episodeOptions = $('tr[data-lang="Latino"]');
+
+			if (episodeOptions.length === 0) {
+				console.error('\t\tNOK!'.red);
+				continue;
+			}
+
+			let episodeOptionsArray = [];
+
+			for (let f = 0; f < episodeOptions.length; f++) {
+				const episodeOptionName = $(episodeOptions[f].children[3]).text();
+				const episodeOptionQuality = $(episodeOptions[f].children[5]).text();
+				const episodeOptionLanguage = $(episodeOptions[f].children[7]).text();
+
+				episodeOptionsArray.push({
+					"episodeOptionName": episodeOptionName,
+					"episodeOptionQuality": episodeOptionQuality,
+					"episodeOptionLanguage": episodeOptionLanguage
+				});
+			}
+
+			console.log(episodeOptionsArray);
 		}
 	}
 })();

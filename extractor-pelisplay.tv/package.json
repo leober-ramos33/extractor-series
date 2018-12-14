@@ -1,8 +1,12 @@
 {
 	"name": "extractor-pelisplay.tv",
 	"version": "1.0.0",
-	"description": "Extract download links of series (TV) from pelisplay.tv",
-	"private": true,
+	"description": "Extract metadata of series from pelisplay.tv",
+	"main": "bin/extractor-pelisplay.tv.js",
+	"bin": {
+		"extractor-pelisplay.tv": "bin/extractor-pelisplay.tv.js"
+	},
+	"preferGlobal": true,
 	"author": "yonaikerlol",
 	"license": "MIT",
 	"scripts": {
@@ -10,24 +14,19 @@
 		"dev": "npx webpack -p -w",
 		"lint": "npx eslint src"
 	},
-	"dependencies": {},
-	"devDependencies": {
-		"@babel/core": "^7.2.0",
-		"@babel/polyfill": "^7.0.0",
-		"@babel/preset-env": "^7.2.0",
+	"dependencies": {
 		"axios": "^0.18.0",
-		"babel-loader": "^8.0.4",
 		"cheerio": "^1.0.0-rc.2",
 		"colors": "^1.3.3",
+		"inquirer": "^6.2.1",
+		"ora": "^3.0.0"
+	},
+	"devDependencies": {
 		"eslint": "^5.10.0",
 		"eslint-config-standard": "^12.0.0",
 		"eslint-plugin-import": "^2.14.0",
 		"eslint-plugin-node": "^8.0.0",
 		"eslint-plugin-promise": "^4.0.1",
-		"eslint-plugin-standard": "^4.0.0",
-		"inquirer": "^6.2.1",
-		"ora": "^3.0.0",
-		"webpack": "^4.27.1",
-		"webpack-cli": "^3.1.2"
+		"eslint-plugin-standard": "^4.0.0"
 	}
 }

@@ -1,10 +1,10 @@
-import cheerio from 'cheerio';
-import axios from 'axios';
-import ora from 'ora';
-import colors from 'colors';
-import inquirer from 'inquirer';
+#!/usr/bin/env node
 
-console.clear();
+const cheerio = require('cheerio');
+const axios = require('axios');
+const ora = require('ora');
+const colors = require('colors');
+const inquirer = require('inquirer');
 
 const basename = path => path.split('/').reverse()[0];
 const args = process.argv.slice(1);

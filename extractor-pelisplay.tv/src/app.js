@@ -5,36 +5,37 @@ import colors from 'colors';
 import inquirer from 'inquirer';
 
 console.clear();
+
 const basename = path => path.split('/').reverse()[0];
 const args = process.argv.slice(1);
 const cmd = basename(args[0]);
 
 const usage = `Usage: ${cmd} <id of serie>
-Example: ${cmd} marvel-s-the-defenders`;
+Example: ${cmd} mr-robot`;
 
 if (args.length < 2) {
-	console.error(usage);
+	console.error(colors.grey(usage));
 	process.exit(1);
 } else if (args.length > 2) {
-	console.error(usage);
-	process.exit(1);
+	console.log(colors.grey(usage), '\n');
 }
 
 const id = args[1];
 
 if (id.indexOf('/') !== -1) {
-	console.error(`"${id}" is not valid id\n`.red);
-	console.error(usage);
+	console.error(colors.red(`"${id}" is not valid id\n`));
+	console.error(colors.grey(usage));
 	process.exit(1);
 }
 
 const urlBase = 'https://www.pelisplay.tv';
+const urlProcesarPlayer = `${urlBase}/entradas/procesar_player`;
 const urlSerie = `${urlBase}/serie/${id}`;
 
 (async () => {
 	let body;
 
-	const spinner = ora().start();
+	const spinner = ora(`Loading serie "${id}"`).start();
 
 	try {
 		const req = await axios(urlSerie);
@@ -45,10 +46,11 @@ const urlSerie = `${urlBase}/serie/${id}`;
 
 		if (err.response.status === 404) {
 			spinner.stop();
-			console.error(`Serie "${id}" not found`.red);
+			console.error(colors.red(`Serie "${id}" not found`));
 			return;
 		} else {
-			console.error('Network Error'.red);
+			spinner.stop();
+			console.error(colors.red('Network Error'));
 		}
 
 		return;
@@ -58,6 +60,7 @@ const urlSerie = `${urlBase}/serie/${id}`;
 
 	spinner.stop();
 
+	const titleWithYear = $('h1.col-xs-12.col-sm-9.col-md-10').text();
 	const title = $('h1.col-xs-12.col-sm-9.col-md-10').text().replace(/\(\d+\)/g, '').trim();
 	const titleOriginal = $('div.directed:nth-child(1) > span:nth-child(2)').text();
 	const description = $('div.sinopsis.m-b-3').text();
@@ -74,18 +77,18 @@ const urlSerie = `${urlBase}/serie/${id}`;
 	const getDirector = () => {
 		if (director.split(', ').length > 1) {
 			const directors = director.replace(/, /g, ' - ');
-			return `\tDirectors: ${directors}`;
+			return `Directors: ${directors}`;
 		} else {
-			return `\tDirector: ${director}`;
+			return `Director: ${director}`;
 		}
 	};
 
 	const getCreator = () => {
 		if (creator.split(', ').length > 1) {
 			const creators = creator.replace(/, /g, ' - ');
-			return `\tCreators: ${creators}`;
+			return `Creators: ${creators}`;
 		} else {
-			return `\tCreator: ${creator}`;
+			return `Creator: ${creator}`;
 		}
 	};
 
@@ -100,8 +103,8 @@ const urlSerie = `${urlBase}/serie/${id}`;
 		categorys = categorysArray.toString()
 			.replace(/,/g, ' - ');
 
-		if (categorysTotal === 1) return `\tCategory(${categorysTotal}): ${categorys}`;
-		else return `\tCategorys(${categorysTotal}): ${categorys}`;
+		if (categorysTotal === 1) return `Category(${categorysTotal}): ${categorys}`;
+		else return `Categorys(${categorysTotal}): ${categorys}`;
 	};
 
 	const getYear = () => {
@@ -109,21 +112,22 @@ const urlSerie = `${urlBase}/serie/${id}`;
 		const yearNow = new Date().getFullYear();
 		const yearAgo = yearNow - year;
 
-		if (yearNow === year) return `\tYear: ${year}`;
+		if (yearNow === year) return `Year: ${year}`;
 
-		if (yearAgo > 1) return `\tYear: ${year} (${yearAgo} years ago)`;
-		else return `\tYear: ${year} (${yearAgo} year ago)`;
+		if (yearAgo > 1) return `Year: ${year} (${yearAgo} years ago)`;
+		else return `Year: ${year} (${yearAgo} year ago)`;
 	};
 
 	const getStars = () => {
 		let starsIcons;
+		const starIcon = String.fromCodePoint(11088);
 
-		if (stars === 0) starsIcons = `\tStars(${stars}): Unknown`;
-		else if (stars === 1) starsIcons = `\tStar(${stars}): ${String.fromCodePoint(11088)}`;
+		if (stars === 0) starsIcons = `Stars(${stars}): Unknown`;
+		else if (stars === 1) starsIcons = `Star(${stars}): ${starIcon}`;
 		else {
-			starsIcons = `\tStars(${stars}): `;
+			starsIcons = `Stars(${stars}): `;
 			for (let i = 0; i < stars; i++) {
-				starsIcons += String.fromCodePoint(11088);
+				starsIcons += starIcon;
 			}
 		}
 
@@ -136,7 +140,7 @@ const urlSerie = `${urlBase}/serie/${id}`;
 		const minutes = $('div.name.row').next().text().trim().substr(0, 10).trim()
 			.replace(/.*h /g, '')
 			.replace(/min/g, ' minutes');
-		let timeString = `\tTime of the episodes: `;
+		let timeString = `Time of the episodes: `;
 
 		if (hours === '0 hours') timeString += minutes;
 		else timeString += `${hours} ${minutes}`;
@@ -144,24 +148,25 @@ const urlSerie = `${urlBase}/serie/${id}`;
 		return timeString;
 	};
 
-	console.log('Extracting:', title.bold, '...\n');
+	console.log('Extracting:', colors.bold(titleWithYear), '...\n');
 
-	console.log('Information:'.bold);
+	console.log(colors.bold('Information:'));
+	console.log('Title:', title);
 	console.log(getYear());
 	console.log(getTime());
-	console.log('\tDescription:', description);
+	console.log('Description:', description);
 	if (stars !== 0) console.log(getStars());
-	if (title !== titleOriginal) console.log(`\tTitle Original: ${titleOriginal}`);
+	if (title !== titleOriginal) console.log(`Title Original: ${titleOriginal}`);
 	if (director !== 'Desconocido') console.log(getDirector());
 	if (creator !== 'Desconocido') console.log(getCreator());
-	console.log(`\tTrailer:`, trailer);
+	console.log(`Trailer:`, trailer);
 	if (categorys.length !== 0) console.log(getCategorys());
-	console.log('\tSeasons:', seasons.length, '\n');
+	console.log('Seasons:', seasons.length, '\n');
 
 	for (let i = 1; i <= seasons.length; i++) {
 		const urlSeason = `${urlSerie}/temporada-${i}`;
 
-		const spinner = ora().start();
+		const spinner = ora(`Loading season "${i}"`).start();
 
 		let body;
 
@@ -171,7 +176,7 @@ const urlSerie = `${urlBase}/serie/${id}`;
 			body = req.data;
 		} catch (err) {
 			spinner.stop();
-			console.error('Network Error'.red);
+			console.error(colors.red('Network Error'));
 			continue;
 		}
 
@@ -181,14 +186,20 @@ const urlSerie = `${urlBase}/serie/${id}`;
 
 		const episodes = $('ul.movie-carrusel > li');
 
-		if (episodes.length) console.log(`Season ${i} (1-${episodes.length}):`.bold);
-		else console.error(`Season ${i} (0-0): ( ${urlSeason} )`.bold);
+		if (episodes.length) console.log(colors.bold(`Season ${i} (1-${episodes.length}):`));
+		else console.error(colors.bold(`Season ${i} (0-${episodes.length}):`));
 
 		for (let ii = 1; ii <= episodes.length; ii++) {
 			const urlEpisode = `${urlSeason}/episodio-${ii}`;
+			let spinner;
 
-			if (ii < 10) console.log(`\t${i}x0${ii} ( ${urlEpisode} )`);
-			else console.log(`\t${i}x${ii} ( ${urlEpisode} )`);
+			if (ii < 10) {
+				console.log(`${i}x0${ii}:`);
+				spinner = ora(`Loading ${i}x0${ii}`).start();
+			} else {
+				console.log(`${i}x${ii}:`);
+				spinner = ora(`Loading ${i}x${ii}`).start();
+			}
 
 			let body;
 
@@ -197,34 +208,95 @@ const urlSerie = `${urlBase}/serie/${id}`;
 
 				body = req.data;
 			} catch (err) {
-				console.error('\t\tNetwork Error'.red);
+				spinner.stop();
+				console.error(colors.red('Network Error'));
 				continue;
 			}
 
 			const $ = cheerio.load(body);
+			spinner.stop();
 
-			const episodeOptions = $('tr[data-lang="Latino"]');
+			const titleEpisode = $('h1.col-xs-12.col-sm-9.col-md-10').text().replace(/\(\d+\)/g, '').trim();
+			const director = $('div.directed > span:nth-child(2)').text();
+			const screenWriter = $('div.credits > span:nth-child(2)').text();
+
+			const getDirector = () => {
+				if (director.split(', ').length > 1) {
+					const directors = director.replace(/, /g, ' - ');
+					return `Directors: ${directors}`;
+				} else {
+					return `Director: ${director}`;
+				}
+			};
+
+			const getScreenWriter = () => {
+				if (screenWriter.split(', ').length > 1) {
+					const screenWriters = screenWriter.replace(/, /g, ' - ');
+					return `Screen Writers: ${screenWriters}`;
+				} else {
+					return `Screen Writer: ${screenWriter}`;
+				}
+			};
+
+			console.log('Title:', titleEpisode);
+			if (director !== 'Desconocido') console.log(getDirector());
+			if (screenWriter !== 'Desconocido') console.log(getScreenWriter());
+			console.log('');
+
+			/* const episodeOptions = $('tr[data-lang="Latino"]');
 
 			if (episodeOptions.length === 0) {
-				console.error('\t\tNOK!'.red);
+				console.error(colors.red('NOK!'));
 				continue;
 			}
 
-			let episodeOptionsArray = [];
+			let choices = [];
+			let tokens = [ $('#lista_online').data('token') ];
 
-			for (let f = 0; f < episodeOptions.length; f++) {
+			for (let f = 0, g = 1; f < episodeOptions.length; f++) {
 				const episodeOptionName = $(episodeOptions[f].children[3]).text();
-				const episodeOptionQuality = $(episodeOptions[f].children[5]).text();
-				const episodeOptionLanguage = $(episodeOptions[f].children[7]).text();
+				const tokenPlayer = $(episodeOptions[f].children[3].children[0]).attr('data-player');
 
-				episodeOptionsArray.push({
-					"episodeOptionName": episodeOptionName,
-					"episodeOptionQuality": episodeOptionQuality,
-					"episodeOptionLanguage": episodeOptionLanguage
+				tokens.push({
+					"player": tokenPlayer
 				});
+
+				choices.push(`${g}. ${episodeOptionName}`);
+
+				g++;
 			}
 
-			console.log(episodeOptionsArray);
+			const answer = await inquirer.prompt([{
+				"type": "list",
+				"name": "serverSelected",
+				"message": "Select a server",
+				"choices": choices
+			}]);
+
+			const serverSelected = parseInt(answer.serverSelected.charAt(0));
+			const tokenPlayer = tokens[serverSelected].player;
+			const token = tokens[0];
+
+			console.log(tokenPlayer, '\n', token);
+
+			try {
+				const req = await axios({
+					"method": "POST",
+					"url": urlProcesarPlayer,
+					"data": {
+						"data": tokenPlayer,
+						"tipo": "videohost",
+						"_token": token
+					}
+				});
+
+				body = req.data;
+			} catch (err) {
+				console.log(err.response.status);
+
+				console.error(colors.red('Network Error'));
+				continue;
+			} */
 		}
 	}
 })();

@@ -2,12 +2,6 @@ import cheerio from 'cheerio';
 import axios from 'axios';
 import ora from 'ora';
 import colors from 'colors';
-import boxen from 'boxen';
-
-console.log(boxen('Extractor\nPelisPlay', {
-	"borderStyle": "round",
-	"align": "center"
-}));
 
 const basename = path => path.split('/').reverse()[0];
 const args = process.argv.slice(1);
@@ -34,84 +28,138 @@ const urlSerie = `${urlBase}/serie/${id}`;
 	const spinner = ora().start();
 
 	try {
-		const req = await axios({
-			"method": "GET",
-			"url": urlSerie
-		});
+		const req = await axios(urlSerie);
 
 		body = req.data;
 	} catch (err) {
-		console.error('\nNetwork Error'.red);
+		spinner.stop();
+
+		if (err.response.status === 404) {
+			spinner.stop();
+			console.error(`Serie "${id}" not found`.red);
+			return;
+		} else {
+			console.error('Network Error'.red);
+		}
+
 		return;
 	}
 
 	const $ = await cheerio.load(body);
+
 	spinner.stop();
 
 	const title = $('h1.col-xs-12.col-sm-9.col-md-10').text();
 	const timeOfEpisodes = $('div.name.row').next().text().trim().substr(0, 10).trim();
-	const year = $('div.name.row').next().text().trim().substr(10).trim();
 	const description = $('div.sinopsis.m-b-3').text();
-	const stars = $('div.questions.m-b-3 > div.list-star:nth-child(1)').children().length;
 	const titleOriginal = $('div.directed:nth-child(1) > span:nth-child(2)').text();
-	const trailer = $('div.capa_trailer > iframe').attr("src")
+	const trailer = $('div.capa_trailer > iframe').attr('src')
 		.replace(/www\.youtube\.com/g, 'youtu.be')
 		.replace(/embed\//g, '');
+
 	const seasons = $('div.posterpie > a.abrir_temporada');
 
 	const getDirector = () => {
 		const director = $('div.directed:nth-child(2) > span:nth-child(2)').text();
 
-		switch (director) {
-		case 'Desconocido':
-			return 'Unknown';
-		default:
-			return director;
+		if (director === 'Desconocido') return '\tDirector: Unknown';
+
+		if (director.split(', ').length > 1) {
+			const directors = director.replace(/, /g, ' - ');
+			return `\tDirectors: ${directors}`;
+		} else {
+			return `\tDirector: ${director}`;
 		}
 	};
 
 	const getCreator = () => {
 		const creator = $('div.credits > span:nth-child(2)').text();
 
-		switch (creator) {
-		case 'Desconocido':
-			return 'Unknown';
-		default:
-			return creator;
+		if (creator === 'Desconocido') return '\tCreator: Unknown';
+
+		if (creator.split(', ').length > 1) {
+			const creators = creator.replace(/, /g, ' - ');
+			return `\tCreators: ${creators}`;
+		} else {
+			return `\tCreator: ${creator}`;
 		}
 	};
 
-	console.log('\nExtracting:', title.bold, '...\n');
+	const getCategorys = () => {
+		let categorysArray = [];
+		let categorys = Array.from($('.category').children());
+		const categorysTotal = categorys.length;
+
+		for (let i = 0; i < categorys.length; i++) {
+			categorysArray.push(categorys[i].children[0].data);
+		}
+
+		categorys = categorysArray.toString()
+			.replace(/,/g, ' - ');
+
+		if (categorysTotal === 0) return `\tCategorys(0): Unknown`;
+		else if (categorysTotal === 1) return `\tCategory(${categorysTotal}): ${categorys}`;
+		else return `\tCategorys(${categorysTotal}): ${categorys}`;
+	};
+
+	const getYear = () => {
+		const year = parseInt($('div.name.row').next().text().trim().substr(10).trim());
+		const yearNow = new Date().getFullYear();
+		const yearAgo = yearNow - year;
+
+		if (yearNow === year) return `\tYear: ${year}`;
+
+		if (yearAgo > 1) return `\tYear: ${year} (${yearAgo} years ago)`;
+		else return `\tYear: ${year} (${yearAgo} year ago)`;
+	};
+
+	const getStars = () => {
+		const stars = $('div.questions.m-b-3 > div.list-star:nth-child(1) > i.star-active').length;
+		let starsIcons = `\tStars(${stars}): `;
+
+		if (stars === 0) starsIcons += 'Unknown';
+		else {
+			for (let i = 0; i < stars; i++) {
+				starsIcons += String.fromCodePoint(11088);
+			}
+		}
+
+		return starsIcons;
+	};
+
+	console.log('Extracting:', title.bold, '...\n');
 
 	console.log('Information:'.bold);
-	console.log('\tYear:', year);
-	console.log('\tTime of episodes:', timeOfEpisodes);
+	console.log(getYear());
+	console.log('\tTime of the episodes:', timeOfEpisodes);
 	console.log('\tDescription:', description);
-	console.log('\tStars:', stars);
+	console.log(getStars());
 	console.log('\tTitle Original:', titleOriginal);
-	console.log('\tDirector:', getDirector());
-	console.log('\tCreator:', getCreator());
-	console.log('\tTrailer:', trailer);
+	console.log(getDirector());
+	console.log(getCreator());
+	console.log(`\tTrailer:`, trailer);
+	console.log(getCategorys());
 	console.log('\tSeasons Total:', seasons.length, '\n');
 
 	for (let i = 1; i <= seasons.length; i++) {
 		const urlSeason = `${urlSerie}/temporada-${i}`;
+
 		const spinner = ora().start();
+
 		let body;
 
 		try {
-			const req = await axios({
-				"method": "GET",
-				"url": urlSeason
-			});
+			const req = await axios(urlSeason);
 
 			body = req.data;
 		} catch (err) {
+			spinner.stop();
 			console.error('Network Error'.red);
 			continue;
 		}
 
 		const $ = await cheerio.load(body);
+
 		spinner.stop();
 
 		const episodes = $('ul.movie-carrusel > li');
@@ -128,10 +176,7 @@ const urlSerie = `${urlBase}/serie/${id}`;
 			let body;
 
 			try {
-				const req = await axios({
-					"method": "GET",
-					"url": urlEpisode
-				});
+				const req = await axios(urlEpisode);
 
 				body = req.data;
 			} catch (err) {
